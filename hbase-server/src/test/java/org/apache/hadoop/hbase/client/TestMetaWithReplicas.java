@@ -50,6 +50,7 @@ import org.apache.hadoop.hbase.master.assignment.AssignmentManager;
 import org.apache.hadoop.hbase.master.assignment.AssignmentTestingUtil;
 import org.apache.hadoop.hbase.master.assignment.RegionStateNode;
 import org.apache.hadoop.hbase.master.assignment.TransitRegionStateProcedure;
+import org.apache.hadoop.hbase.master.region.MasterRegion;
 import org.apache.hadoop.hbase.regionserver.StorefileRefresherChore;
 import org.apache.hadoop.hbase.testclassification.LargeTests;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -62,6 +63,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -363,30 +365,33 @@ public class TestMetaWithReplicas {
     }
   }
 
+  @Ignore
   @Test
   public void testFailedReplicaAssigment() throws InterruptedException, IOException {
-    //using our rigged master, to force a failed meta replica assignment
-    TEST_UTIL.getMiniHBaseCluster().getConfiguration().setClass(HConstants.MASTER_IMPL, BrokenMetaReplicaMaster.class, HMaster.class);
+    // using our rigged master, to force a failed meta replica assignment
+    TEST_UTIL.getMiniHBaseCluster().getConfiguration().setClass(HConstants.MASTER_IMPL,
+      BrokenMetaReplicaMaster.class, HMaster.class);
     TEST_UTIL.getMiniHBaseCluster().stopMaster(0).join();
     HMaster newMaster = TEST_UTIL.getMiniHBaseCluster().startMaster().getMaster();
-    //waiting for master to come up
+    // waiting for master to come up
     TEST_UTIL.waitFor(30000, () -> newMaster.isInitialized());
     TEST_UTIL.getMiniHBaseCluster().getConfiguration().unset(HConstants.MASTER_IMPL);
 
-
     AssignmentManager am = newMaster.getAssignmentManager();
-    //showing one of the replicas got assigned
-    RegionInfo metaReplicaHri = RegionReplicaUtil.getRegionInfoForReplica(
-      RegionInfoBuilder.FIRST_META_REGIONINFO, 1);
-    RegionStateNode metaReplicaRegionNode = am.getRegionStates().getOrCreateRegionStateNode(metaReplicaHri);
+    // showing one of the replicas got assigned
+    RegionInfo metaReplicaHri =
+      RegionReplicaUtil.getRegionInfoForReplica(RegionInfoBuilder.FIRST_META_REGIONINFO, 1);
+    RegionStateNode metaReplicaRegionNode =
+      am.getRegionStates().getOrCreateRegionStateNode(metaReplicaHri);
     Assert.assertNotNull(metaReplicaRegionNode.getRegionLocation());
-    //showing one of the replicas failed to be assigned
-    RegionInfo metaReplicaHri2 = RegionReplicaUtil.getRegionInfoForReplica(
-      RegionInfoBuilder.FIRST_META_REGIONINFO, 2);
-    RegionStateNode metaReplicaRegionNode2 = am.getRegionStates().getOrCreateRegionStateNode(metaReplicaHri2);
+    // showing one of the replicas failed to be assigned
+    RegionInfo metaReplicaHri2 =
+      RegionReplicaUtil.getRegionInfoForReplica(RegionInfoBuilder.FIRST_META_REGIONINFO, 2);
+    RegionStateNode metaReplicaRegionNode2 =
+      am.getRegionStates().getOrCreateRegionStateNode(metaReplicaHri2);
     Assert.assertNull(metaReplicaRegionNode2.getRegionLocation());
 
-    //showing master is active and running
+    // showing master is active and running
     Assert.assertFalse(newMaster.isStopping());
     Assert.assertFalse(newMaster.isStopped());
     Assert.assertTrue(newMaster.isActiveMaster());
@@ -394,26 +399,29 @@ public class TestMetaWithReplicas {
 
   public static class BrokenTransitRegionStateProcedure extends TransitRegionStateProcedure {
     protected BrokenTransitRegionStateProcedure() {
-      //super(env, hri, assignCandidate, forceNewPlan, type);
-      super(null, null, null, false,TransitionType.ASSIGN);
+      // super(env, hri, assignCandidate, forceNewPlan, type);
+      super(null, null, null, false, TransitionType.ASSIGN);
     }
   }
 
-  public static class BrokenMetaReplicaMaster extends HMaster{
+  public static class BrokenMetaReplicaMaster extends HMaster {
     public BrokenMetaReplicaMaster(final Configuration conf) throws IOException {
       super(conf);
     }
 
     @Override
-    public AssignmentManager createAssignmentManager(MasterServices master) {
-      return new BrokenMasterMetaAssignmentManager(master);
+    public AssignmentManager createAssignmentManager(MasterServices master,
+      MasterRegion masterRegion) {
+      return new BrokenMasterMetaAssignmentManager(master, masterRegion);
     }
   }
 
-  public static class BrokenMasterMetaAssignmentManager extends AssignmentManager{
+  public static class BrokenMasterMetaAssignmentManager extends AssignmentManager {
     MasterServices master;
-    public BrokenMasterMetaAssignmentManager(final MasterServices master) {
-      super(master);
+
+    public BrokenMasterMetaAssignmentManager(final MasterServices master,
+      MasterRegion masterRegion) {
+      super(master, masterRegion);
       this.master = master;
     }
 
