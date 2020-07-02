@@ -46,6 +46,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.client.AsyncProcess.RowChecker.ReturnCode;
 import org.apache.hadoop.hbase.CallQueueTooBigException;
 import org.apache.hadoop.hbase.DoNotRetryIOException;
@@ -821,6 +822,7 @@ class AsyncProcess {
 
       @Override
       public void run() {
+        RequestIdPropagation.logRequestIdReached(multiAction);
         MultiResponse res = null;
         PayloadCarryingServerCallable callable = currentCallable;
         try {
@@ -1111,6 +1113,7 @@ class AsyncProcess {
       // Run the last item on the same thread if we are already on a send thread.
       // We hope most of the time it will be the only item, so we can cut down on threads.
       int actionsRemaining = actionsByServer.size();
+      RequestIdPropagation.logRequestIdReached(actionsByServer);
       // This iteration is by server (the HRegionLocation comparator is by server portion only).
       for (Map.Entry<ServerName, MultiAction<Row>> e : actionsByServer.entrySet()) {
         ServerName server = e.getKey();

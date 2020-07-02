@@ -71,6 +71,7 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.Tag;
@@ -1450,6 +1451,7 @@ public final class ProtobufUtil {
   public static MutationProto toMutationNoData(final MutationType type, final Mutation mutation,
       final MutationProto.Builder builder, long nonce) throws IOException {
     getMutationBuilderAndSetCommonFields(type, mutation, builder);
+    RequestIdPropagation.propagateRequestId(mutation,builder);
     builder.setAssociatedCellCount(mutation.size());
     if (mutation instanceof Increment) {
       setTimeRange(builder, ((Increment)mutation).getTimeRange());
