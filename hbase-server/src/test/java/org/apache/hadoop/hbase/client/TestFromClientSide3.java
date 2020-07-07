@@ -824,21 +824,25 @@ public class TestFromClientSide3 {
 
     Put put = new Put(ROW);
     put.addColumn(FAMILY, Bytes.toBytes(0), generateHugeValue(3 * 1024 * 1024));
+    put.setId("1");
     table.put(put);
 
     put = new Put(ROW);
     put.addColumn(FAMILY, Bytes.toBytes(1), generateHugeValue(4 * 1024 * 1024));
+    put.setId("2");
     table.put(put);
 
     for (int i = 2; i < 5; i++) {
       for (int version = 0; version < 2; version++) {
         put = new Put(ROW);
+        put.setId(Integer.toString(i));
         put.addColumn(FAMILY, Bytes.toBytes(i), generateHugeValue(1024));
         table.put(put);
       }
     }
 
     Scan scan = new Scan();
+    scan.setId("123123");
     scan.withStartRow(ROW).withStopRow(ROW, true).addFamily(FAMILY).setBatch(3)
         .setMaxResultSize(4 * 1024 * 1024);
     Result result;

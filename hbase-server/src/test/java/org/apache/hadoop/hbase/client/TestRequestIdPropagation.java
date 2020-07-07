@@ -69,10 +69,10 @@ public class TestRequestIdPropagation {
         int iterations = 0;
         List actions = new ArrayList();
         Put put1,put2;
-        try {
             Object[] results = new Object[(iterations + 1) * 2];
 
             for (int i = 0; i < iterations + 1; i ++) {
+                System.out.println("start");
                 put1 = new Put(ROW);
                 put1.addColumn(FAMILY, QUALIFIER, VALUE);
                 RequestIdPropagation.assignInitialRequestId(put1);
@@ -86,10 +86,26 @@ public class TestRequestIdPropagation {
 
             }
             table.batch(actions, results);
+            Scan scan = new Scan();
+            scan.setId("123123");
+            System.out.println("come");
+            scan.withStartRow(ROW).withStopRow(ROW, true).addFamily(FAMILY);
+            Result result;
+            ResultScanner scanner = table.getScanner(scan);
+                List<Result> list = new ArrayList<>();
+                /*
+                 * The first scan rpc should return a result with 2 cells, because 3MB + 4MB > 4MB; The second
+                 * scan rpc should return a result with 3 cells, because reach the batch limit = 3; The
+                 * mayHaveMoreCellsInRow in last result should be false in the scan rpc. BTW, the
+                 * moreResultsInRegion also would be false. Finally, the client should collect all the cells
+                 * into two result: 2+3 -> 3+2;
+                 */
+                while ((result = scanner.next()) != null) {
+                    list.add(result);
+                }
 
-        } finally {
+
             table.close();
-        }
 
     }
 }

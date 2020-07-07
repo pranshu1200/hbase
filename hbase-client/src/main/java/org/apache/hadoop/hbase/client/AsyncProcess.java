@@ -1092,6 +1092,9 @@ class AsyncProcess {
           ", row cannot be null");
       RegionLocations loc = null;
       try {
+        ConnectionManager.HConnectionImplementation conn=(ConnectionManager.HConnectionImplementation)(connection);
+        RequestIdFlow.propagateRequestId(action,conn);
+        RequestIdFlow.logLookRegion(action);
         loc = connection.locateRegion(
             tableName, action.getAction().getRow(), useCache, true, action.getReplicaId());
       } catch (IOException ex) {

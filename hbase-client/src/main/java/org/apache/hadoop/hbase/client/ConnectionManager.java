@@ -59,6 +59,7 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.MasterNotRunningException;
 import org.apache.hadoop.hbase.MetaTableAccessor;
 import org.apache.hadoop.hbase.RegionLocations;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.TableNotEnabledException;
@@ -627,6 +628,8 @@ class ConnectionManager {
 
     private final RetryingCallerInterceptor interceptor;
 
+    private String requestId;
+
     /**
      * Cluster registry of basic info such as clusterid and meta region location.
      */
@@ -889,6 +892,14 @@ class ConnectionManager {
 
     protected ExecutorService getCurrentBatchPool() {
       return batchPool;
+    }
+
+    public String getRequestId(){
+      return this.requestId;
+    }
+
+    public void setRequestId(String s){
+      this.requestId=s;
     }
 
     private void shutdownPools() {
@@ -1237,6 +1248,8 @@ class ConnectionManager {
         if (now - lastMetaLookupTime < META_LOOKUP_CACHE_INTERVAL) {
           if (metaLocations != null &&
               metaLocations.getRegionLocation(replicaId) != null) {
+            RequestIdFlow.logMetaFoundInCache(this);
+            this.setRequestId(null);
             return metaLocations;
           }
         } else {
@@ -1250,11 +1263,15 @@ class ConnectionManager {
         if (useCache) {
           if (metaLocations != null &&
               metaLocations.getRegionLocation(replicaId) != null) {
+            RequestIdFlow.logMetaFoundInCache(this);
+            this.setRequestId(null);
             return metaLocations;
           }
         }
         // Look up from zookeeper
         metaLocations = this.registry.getMetaRegionLocation();
+        RequestIdFlow.logMetaFoundInZK(this);
+        this.setRequestId(null);
         lastMetaLookupTime = EnvironmentEdgeManager.currentTime();
         if (metaLocations != null &&
             metaLocations.getRegionLocation(replicaId) != null) {
@@ -1276,6 +1293,8 @@ class ConnectionManager {
       if (useCache) {
         RegionLocations locations = getCachedLocation(tableName, row);
         if (locations != null && locations.getRegionLocation(replicaId) != null) {
+          RequestIdFlow.logRegionFoundInCache(this.getRequestId());
+          this.setRequestId(null);
           return locations;
         }
       }
@@ -1286,6 +1305,8 @@ class ConnectionManager {
       byte[] metaKey = HRegionInfo.createRegionName(tableName, row, HConstants.NINES, false);
 
       Scan s = new Scan();
+      RequestIdFlow.propagateRequestId(this,s);
+      this.setRequestId(null);
       s.setReversed(true);
       s.withStartRow(metaKey);
 
@@ -1303,6 +1324,8 @@ class ConnectionManager {
         if (useCache) {
           RegionLocations locations = getCachedLocation(tableName, row);
           if (locations != null && locations.getRegionLocation(replicaId) != null) {
+            RequestIdFlow.logRegionFoundInCache(this.getRequestId());
+            this.setRequestId(null);
             return locations;
           }
         } else {
@@ -1318,7 +1341,9 @@ class ConnectionManager {
         try {
           if (useCache) {// re-check cache after get lock
             RegionLocations locations = getCachedLocation(tableName, row);
+            RequestIdFlow.logRegionFoundInCache(this.getRequestId());
             if (locations != null && locations.getRegionLocation(replicaId) != null) {
+              this.setRequestId(null);
               return locations;
             }
           }

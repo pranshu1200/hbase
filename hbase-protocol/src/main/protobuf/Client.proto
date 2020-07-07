@@ -273,6 +273,7 @@ message Scan {
   }
   optional ReadType readType = 23 [default = DEFAULT];
   optional bool need_cursor_result = 24 [default = false];
+  optional string my_request_id=25;
 }
 
 /**

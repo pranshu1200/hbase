@@ -104,16 +104,21 @@ public class RequestIdPropagation {
     }
 
     public static void requestReachedServer(Message msg){
-        if(msg.getClass().getName()!="org.apache.hadoop.hbase.protobuf.generated.ClientProtos$MultiRequest") {
-              return;
-        }
-        ClientProtos.MultiRequest var= (ClientProtos.MultiRequest)(msg);
-        for (int jj = 0; jj < var.getRegionActionList().size(); jj++) {
-            for (int ii = 0; ii < var.getRegionActionList().get(jj).getActionList().size(); ii++) {
-                if(var.getRegionActionList().get(jj).getActionList().get(ii).getMutation().getMyTraceId()!="") {
-                    logger.info("mutation id {}. recived at server",
+        if(msg.getClass().getName()=="org.apache.hadoop.hbase.protobuf.generated.ClientProtos$MultiRequest") {
+            ClientProtos.MultiRequest var= (ClientProtos.MultiRequest)(msg);
+            for (int jj = 0; jj < var.getRegionActionList().size(); jj++) {
+                for (int ii = 0; ii < var.getRegionActionList().get(jj).getActionList().size(); ii++) {
+                    if(var.getRegionActionList().get(jj).getActionList().get(ii).getMutation().getMyTraceId()!="") {
+                        logger.info("mutation id {}. recived at server",
                             var.getRegionActionList().get(jj).getActionList().get(ii).getMutation().getMyTraceId());
+                    }
                 }
+            }
+        }
+        else if(msg.getClass().getName()=="org.apache.hadoop.hbase.protobuf.generated.ClientProtos$ScanRequest"){
+            ClientProtos.ScanRequest var=(ClientProtos.ScanRequest)(msg);
+            if(var.getScan().getMyRequestId()!="") {
+                logger.info("server receives scan request {}.", var.getScan().getMyRequestId());
             }
         }
     }
