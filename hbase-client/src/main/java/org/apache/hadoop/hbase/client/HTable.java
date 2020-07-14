@@ -902,6 +902,7 @@ public class HTable implements HTableInterface, RegionLocator {
 
   public void batch(final List<? extends Row> actions, final Object[] results, int rpcTimeout)
       throws InterruptedException, IOException {
+    RequestIdPropagation.logRequestIdReached((ArrayList<Mutation>) actions);
     AsyncRequestFuture ars = multiAp.submitAll(pool, tableName, actions, null, results, null,
         operationTimeout, rpcTimeout);
     ars.waitUntilDone();
@@ -933,6 +934,7 @@ public class HTable implements HTableInterface, RegionLocator {
   @Override
   public Object[] batch(final List<? extends Row> actions)
      throws InterruptedException, IOException {
+    RequestIdPropagation.logRequestIdReached((ArrayList<Mutation>) actions);
     Object[] results = new Object[actions.size()];
     batch(actions, results);
     return results;

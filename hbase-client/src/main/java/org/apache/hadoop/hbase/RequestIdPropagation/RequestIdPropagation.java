@@ -41,15 +41,14 @@ public class RequestIdPropagation {
             builder.setMyTraceId(mutation.getId());
         }
     }
-
-
     public static void logRequestIdReached(Mutation mutation){
-        logger.info("request id {}. assigned to mutation object {}.",extractRequestId(mutation),mutation);
+        System.out.println("request "+extractRequestId(mutation)+"reached in HBase");
+        logger.info("request id {} reached in HBase",extractRequestId(mutation),mutation);
     }
     public static void logRequestIdReached(final ArrayList<Mutation>action){
         for(int it=0;it<action.size();it++){
-            Mutation mutation=(Mutation) (action.get(it));
-            logger.debug("requestId {}. for mutation object {}. in batch {}.",mutation.getId(),action.get(it),action);
+            Mutation mutation=(Mutation)(action.get(it));
+            logRequestIdReached(mutation);
         }
     }
     public static void logRequestIdReached(Map<ServerName, MultiAction<Row>> actionsByServer){
@@ -63,26 +62,8 @@ public class RequestIdPropagation {
                         if(m.getId()!=null) {
                             logger.debug("requestid {}. associated to server {}.", m.getId(), server.getServerName());
                         }
+                        System.out.println("requestid "+m.getId()+"associated to server "+server.getServerName());
                 }
-            }
-        }
-    }
-    public static  void logRequestIdReached(MultiAction<Row> multiAction){
-        for(Map.Entry<byte[],List<Action<Row>>> entry : multiAction.actions.entrySet()){
-          for(int ii=0;ii<entry.getValue().size();ii++){
-            Mutation m= (Mutation)(entry.getValue().get(ii).getAction()) ;
-            if(m.getId()!=null) {
-                logger.debug("mutation {}. running",m.getId());
-            }
-          }
-        }
-    }
-
-    public static void logRequestIdReached(ClientProtos.MultiRequest requestProto){
-        for(int jj=0;jj<requestProto.getRegionActionList().size();jj++) {
-            for (int ii = 0; ii < requestProto.getRegionActionList().get(jj).getActionList().size(); ii++) {
-                if(requestProto.getRegionActionList().get(jj).getActionList().get(ii).getMutation().hasMyTraceId()){
-                    logger.debug("Mutation id {}. attached to RequestProto",requestProto.getRegionActionList().get(jj).getActionList().get(ii).getMutation().getMyTraceId());}
             }
         }
     }
@@ -109,7 +90,7 @@ public class RequestIdPropagation {
             for (int jj = 0; jj < var.getRegionActionList().size(); jj++) {
                 for (int ii = 0; ii < var.getRegionActionList().get(jj).getActionList().size(); ii++) {
                     if(var.getRegionActionList().get(jj).getActionList().get(ii).getMutation().getMyTraceId()!="") {
-                        logger.info("mutation id {}. recived at server",
+                        logger.info("request id {}. received at server ",
                             var.getRegionActionList().get(jj).getActionList().get(ii).getMutation().getMyTraceId());
                     }
                 }
@@ -118,7 +99,7 @@ public class RequestIdPropagation {
         else if(msg.getClass().getName()=="org.apache.hadoop.hbase.protobuf.generated.ClientProtos$ScanRequest"){
             ClientProtos.ScanRequest var=(ClientProtos.ScanRequest)(msg);
             if(var.getScan().getMyRequestId()!="") {
-                logger.info("server receives scan request {}.", var.getScan().getMyRequestId());
+                logger.info("server receives scan request {}", var.getScan().getMyRequestId());
             }
         }
     }

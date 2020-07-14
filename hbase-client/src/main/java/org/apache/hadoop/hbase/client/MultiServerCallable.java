@@ -172,7 +172,6 @@ class MultiServerCallable<R> extends PayloadCarryingServerCallable<MultiResponse
     controller.setCallTimeout(callTimeout);
     ClientProtos.MultiResponse responseProto;
     ClientProtos.MultiRequest requestProto = multiRequestBuilder.build();
-    RequestIdPropagation.logRequestIdReached(requestProto);
     try {
       responseProto = getStub().multi(controller, requestProto);
     } catch (ServiceException e) {

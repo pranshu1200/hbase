@@ -822,7 +822,6 @@ class AsyncProcess {
 
       @Override
       public void run() {
-        RequestIdPropagation.logRequestIdReached(multiAction);
         MultiResponse res = null;
         PayloadCarryingServerCallable callable = currentCallable;
         try {
@@ -1094,7 +1093,6 @@ class AsyncProcess {
       try {
         ConnectionManager.HConnectionImplementation conn=(ConnectionManager.HConnectionImplementation)(connection);
         RequestIdFlow.propagateRequestId(action,conn);
-        RequestIdFlow.logLookRegion(action);
         loc = connection.locateRegion(
             tableName, action.getAction().getRow(), useCache, true, action.getReplicaId());
       } catch (IOException ex) {

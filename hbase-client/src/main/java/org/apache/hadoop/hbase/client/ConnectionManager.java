@@ -1248,7 +1248,6 @@ class ConnectionManager {
         if (now - lastMetaLookupTime < META_LOOKUP_CACHE_INTERVAL) {
           if (metaLocations != null &&
               metaLocations.getRegionLocation(replicaId) != null) {
-            RequestIdFlow.logMetaFoundInCache(this);
             this.setRequestId(null);
             return metaLocations;
           }
@@ -1263,14 +1262,12 @@ class ConnectionManager {
         if (useCache) {
           if (metaLocations != null &&
               metaLocations.getRegionLocation(replicaId) != null) {
-            RequestIdFlow.logMetaFoundInCache(this);
             this.setRequestId(null);
             return metaLocations;
           }
         }
         // Look up from zookeeper
         metaLocations = this.registry.getMetaRegionLocation();
-        RequestIdFlow.logMetaFoundInZK(this);
         this.setRequestId(null);
         lastMetaLookupTime = EnvironmentEdgeManager.currentTime();
         if (metaLocations != null &&
@@ -1293,7 +1290,6 @@ class ConnectionManager {
       if (useCache) {
         RegionLocations locations = getCachedLocation(tableName, row);
         if (locations != null && locations.getRegionLocation(replicaId) != null) {
-          RequestIdFlow.logRegionFoundInCache(this.getRequestId());
           this.setRequestId(null);
           return locations;
         }
@@ -1306,9 +1302,9 @@ class ConnectionManager {
 
       Scan s = new Scan();
       RequestIdFlow.propagateRequestId(this,s);
-      this.setRequestId(null);
       s.setReversed(true);
       s.withStartRow(metaKey);
+      this.setRequestId(null);
 
       if (this.useMetaReplicas) {
         s.setConsistency(Consistency.TIMELINE);
@@ -1324,7 +1320,6 @@ class ConnectionManager {
         if (useCache) {
           RegionLocations locations = getCachedLocation(tableName, row);
           if (locations != null && locations.getRegionLocation(replicaId) != null) {
-            RequestIdFlow.logRegionFoundInCache(this.getRequestId());
             this.setRequestId(null);
             return locations;
           }
@@ -1341,7 +1336,6 @@ class ConnectionManager {
         try {
           if (useCache) {// re-check cache after get lock
             RegionLocations locations = getCachedLocation(tableName, row);
-            RequestIdFlow.logRegionFoundInCache(this.getRequestId());
             if (locations != null && locations.getRegionLocation(replicaId) != null) {
               this.setRequestId(null);
               return locations;
