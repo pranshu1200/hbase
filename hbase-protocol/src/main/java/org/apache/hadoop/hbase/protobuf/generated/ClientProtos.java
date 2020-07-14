@@ -15430,7 +15430,8 @@ public final class ClientProtos {
     /**
      * <code>optional string my_request_id = 25;</code>
      */
-    public java.lang.String getMyRequestId() {
+    public java.lang.String
+    getMyRequestId() {
       java.lang.Object ref = myRequestId_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
@@ -18169,7 +18170,8 @@ public final class ClientProtos {
       /**
        * <code>optional string my_request_id = 25;</code>
        */
-      public Builder setMyRequestId(
+      public Builder
+      setMyRequestId(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
