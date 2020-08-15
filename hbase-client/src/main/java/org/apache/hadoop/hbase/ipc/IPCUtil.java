@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 
 import org.apache.hadoop.hbase.DoNotRetryIOException;
 import org.apache.hadoop.hbase.HConstants;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.classification.InterfaceAudience;
 import org.apache.hadoop.hbase.exceptions.ConnectionClosingException;
 import org.apache.hadoop.hbase.protobuf.generated.RPCProtos.CellBlockMeta;
@@ -74,6 +75,7 @@ class IPCUtil {
     // This allocates a buffer that is the size of the message internally.
     header.writeDelimitedTo(dos);
     if (param != null) {
+      RequestIdPropagation.logRequestIdReached(param);
       param.writeDelimitedTo(dos);
     }
     if (cellBlock != null) {

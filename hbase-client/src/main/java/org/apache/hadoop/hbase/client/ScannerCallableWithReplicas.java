@@ -38,6 +38,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.DoNotRetryIOException;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.RegionLocations;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.classification.InterfaceAudience;
 import org.apache.hadoop.hbase.client.ScannerCallable.MoreResults;
@@ -150,6 +151,7 @@ class ScannerCallableWithReplicas implements RetryingCallable<Result[]> {
     if (regionReplication <= 0) {
       RegionLocations rl = null;
       try {
+        RequestIdFlow.propagateRequestId(scan, (ConnectionManager.HConnectionImplementation)(cConnection));
         rl = RpcRetryingCallerWithReadReplicas.getRegionLocations(true,
             RegionReplicaUtil.DEFAULT_REPLICA_ID, cConnection, tableName,
             currentScannerCallable.getRow());

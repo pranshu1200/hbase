@@ -8530,6 +8530,21 @@ public final class ClientProtos {
      * <code>optional uint64 nonce = 9;</code>
      */
     long getNonce();
+
+    // optional string my_trace_id = 10;
+    /**
+     * <code>optional string my_trace_id = 10;</code>
+     */
+    boolean hasMyTraceId();
+    /**
+     * <code>optional string my_trace_id = 10;</code>
+     */
+    java.lang.String getMyTraceId();
+    /**
+     * <code>optional string my_trace_id = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getMyTraceIdBytes();
   }
   /**
    * Protobuf type {@code hbase.pb.MutationProto}
@@ -8660,6 +8675,11 @@ public final class ClientProtos {
             case 72: {
               bitField0_ |= 0x00000040;
               nonce_ = input.readUInt64();
+              break;
+            }
+            case 82: {
+              bitField0_ |= 0x00000080;
+              myTraceId_ = input.readBytes();
               break;
             }
           }
@@ -10865,6 +10885,49 @@ public final class ClientProtos {
       return nonce_;
     }
 
+    // optional string my_trace_id = 10;
+    public static final int MY_TRACE_ID_FIELD_NUMBER = 10;
+    private java.lang.Object myTraceId_;
+    /**
+     * <code>optional string my_trace_id = 10;</code>
+     */
+    public boolean hasMyTraceId() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional string my_trace_id = 10;</code>
+     */
+    public java.lang.String getMyTraceId() {
+      java.lang.Object ref = myTraceId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          myTraceId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string my_trace_id = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMyTraceIdBytes() {
+      java.lang.Object ref = myTraceId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        myTraceId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       row_ = com.google.protobuf.ByteString.EMPTY;
       mutateType_ = org.apache.hadoop.hbase.protobuf.generated.ClientProtos.MutationProto.MutationType.APPEND;
@@ -10875,6 +10938,7 @@ public final class ClientProtos {
       timeRange_ = org.apache.hadoop.hbase.protobuf.generated.HBaseProtos.TimeRange.getDefaultInstance();
       associatedCellCount_ = 0;
       nonce_ = 0L;
+      myTraceId_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -10927,6 +10991,9 @@ public final class ClientProtos {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeUInt64(9, nonce_);
       }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(10, getMyTraceIdBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -10971,6 +11038,10 @@ public final class ClientProtos {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(9, nonce_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getMyTraceIdBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -11034,6 +11105,11 @@ public final class ClientProtos {
         result = result && (getNonce()
             == other.getNonce());
       }
+      result = result && (hasMyTraceId() == other.hasMyTraceId());
+      if (hasMyTraceId()) {
+        result = result && getMyTraceId()
+            .equals(other.getMyTraceId());
+      }
       result = result &&
           getUnknownFields().equals(other.getUnknownFields());
       return result;
@@ -11082,6 +11158,10 @@ public final class ClientProtos {
       if (hasNonce()) {
         hash = (37 * hash) + NONCE_FIELD_NUMBER;
         hash = (53 * hash) + hashLong(getNonce());
+      }
+      if (hasMyTraceId()) {
+        hash = (37 * hash) + MY_TRACE_ID_FIELD_NUMBER;
+        hash = (53 * hash) + getMyTraceId().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -11234,6 +11314,8 @@ public final class ClientProtos {
         bitField0_ = (bitField0_ & ~0x00000080);
         nonce_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000100);
+        myTraceId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -11312,6 +11394,10 @@ public final class ClientProtos {
           to_bitField0_ |= 0x00000040;
         }
         result.nonce_ = nonce_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.myTraceId_ = myTraceId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -11400,6 +11486,11 @@ public final class ClientProtos {
         }
         if (other.hasNonce()) {
           setNonce(other.getNonce());
+        }
+        if (other.hasMyTraceId()) {
+          bitField0_ |= 0x00000200;
+          myTraceId_ = other.myTraceId_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -12321,6 +12412,80 @@ public final class ClientProtos {
       public Builder clearNonce() {
         bitField0_ = (bitField0_ & ~0x00000100);
         nonce_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional string my_trace_id = 10;
+      private java.lang.Object myTraceId_ = "";
+      /**
+       * <code>optional string my_trace_id = 10;</code>
+       */
+      public boolean hasMyTraceId() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string my_trace_id = 10;</code>
+       */
+      public java.lang.String getMyTraceId() {
+        java.lang.Object ref = myTraceId_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          myTraceId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string my_trace_id = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMyTraceIdBytes() {
+        java.lang.Object ref = myTraceId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          myTraceId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string my_trace_id = 10;</code>
+       */
+      public Builder setMyTraceId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        myTraceId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string my_trace_id = 10;</code>
+       */
+      public Builder clearMyTraceId() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        myTraceId_ = getDefaultInstance().getMyTraceId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string my_trace_id = 10;</code>
+       */
+      public Builder setMyTraceIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        myTraceId_ = value;
         onChanged();
         return this;
       }
@@ -14409,6 +14574,21 @@ public final class ClientProtos {
      * <code>optional bool need_cursor_result = 24 [default = false];</code>
      */
     boolean getNeedCursorResult();
+
+    // optional string my_request_id = 25;
+    /**
+     * <code>optional string my_request_id = 25;</code>
+     */
+    boolean hasMyRequestId();
+    /**
+     * <code>optional string my_request_id = 25;</code>
+     */
+    java.lang.String getMyRequestId();
+    /**
+     * <code>optional string my_request_id = 25;</code>
+     */
+    com.google.protobuf.ByteString
+        getMyRequestIdBytes();
   }
   /**
    * Protobuf type {@code hbase.pb.Scan}
@@ -14627,6 +14807,11 @@ public final class ClientProtos {
             case 192: {
               bitField0_ |= 0x00100000;
               needCursorResult_ = input.readBool();
+              break;
+            }
+            case 202: {
+              bitField0_ |= 0x00200000;
+              myRequestId_ = input.readBytes();
               break;
             }
           }
@@ -15233,6 +15418,50 @@ public final class ClientProtos {
       return needCursorResult_;
     }
 
+    // optional string my_request_id = 25;
+    public static final int MY_REQUEST_ID_FIELD_NUMBER = 25;
+    private java.lang.Object myRequestId_;
+    /**
+     * <code>optional string my_request_id = 25;</code>
+     */
+    public boolean hasMyRequestId() {
+      return ((bitField0_ & 0x00200000) == 0x00200000);
+    }
+    /**
+     * <code>optional string my_request_id = 25;</code>
+     */
+    public java.lang.String
+    getMyRequestId() {
+      java.lang.Object ref = myRequestId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          myRequestId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string my_request_id = 25;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMyRequestIdBytes() {
+      java.lang.Object ref = myRequestId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        myRequestId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       column_ = java.util.Collections.emptyList();
       attribute_ = java.util.Collections.emptyList();
@@ -15258,6 +15487,7 @@ public final class ClientProtos {
       includeStopRow_ = false;
       readType_ = org.apache.hadoop.hbase.protobuf.generated.ClientProtos.Scan.ReadType.DEFAULT;
       needCursorResult_ = false;
+      myRequestId_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -15367,6 +15597,9 @@ public final class ClientProtos {
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
         output.writeBool(24, needCursorResult_);
       }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+        output.writeBytes(25, getMyRequestIdBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -15471,6 +15704,10 @@ public final class ClientProtos {
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(24, needCursorResult_);
+      }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(25, getMyRequestIdBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -15606,6 +15843,11 @@ public final class ClientProtos {
         result = result && (getNeedCursorResult()
             == other.getNeedCursorResult());
       }
+      result = result && (hasMyRequestId() == other.hasMyRequestId());
+      if (hasMyRequestId()) {
+        result = result && getMyRequestId()
+            .equals(other.getMyRequestId());
+      }
       result = result &&
           getUnknownFields().equals(other.getUnknownFields());
       return result;
@@ -15714,6 +15956,10 @@ public final class ClientProtos {
       if (hasNeedCursorResult()) {
         hash = (37 * hash) + NEED_CURSOR_RESULT_FIELD_NUMBER;
         hash = (53 * hash) + hashBoolean(getNeedCursorResult());
+      }
+      if (hasMyRequestId()) {
+        hash = (37 * hash) + MY_REQUEST_ID_FIELD_NUMBER;
+        hash = (53 * hash) + getMyRequestId().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -15908,6 +16154,8 @@ public final class ClientProtos {
         bitField0_ = (bitField0_ & ~0x00400000);
         needCursorResult_ = false;
         bitField0_ = (bitField0_ & ~0x00800000);
+        myRequestId_ = "";
+        bitField0_ = (bitField0_ & ~0x01000000);
         return this;
       }
 
@@ -16055,6 +16303,10 @@ public final class ClientProtos {
           to_bitField0_ |= 0x00100000;
         }
         result.needCursorResult_ = needCursorResult_;
+        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
+          to_bitField0_ |= 0x00200000;
+        }
+        result.myRequestId_ = myRequestId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -16211,6 +16463,11 @@ public final class ClientProtos {
         }
         if (other.hasNeedCursorResult()) {
           setNeedCursorResult(other.getNeedCursorResult());
+        }
+        if (other.hasMyRequestId()) {
+          bitField0_ |= 0x01000000;
+          myRequestId_ = other.myRequestId_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -17868,6 +18125,81 @@ public final class ClientProtos {
       public Builder clearNeedCursorResult() {
         bitField0_ = (bitField0_ & ~0x00800000);
         needCursorResult_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional string my_request_id = 25;
+      private java.lang.Object myRequestId_ = "";
+      /**
+       * <code>optional string my_request_id = 25;</code>
+       */
+      public boolean hasMyRequestId() {
+        return ((bitField0_ & 0x01000000) == 0x01000000);
+      }
+      /**
+       * <code>optional string my_request_id = 25;</code>
+       */
+      public java.lang.String getMyRequestId() {
+        java.lang.Object ref = myRequestId_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          myRequestId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string my_request_id = 25;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMyRequestIdBytes() {
+        java.lang.Object ref = myRequestId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          myRequestId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string my_request_id = 25;</code>
+       */
+      public Builder
+      setMyRequestId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x01000000;
+        myRequestId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string my_request_id = 25;</code>
+       */
+      public Builder clearMyRequestId() {
+        bitField0_ = (bitField0_ & ~0x01000000);
+        myRequestId_ = getDefaultInstance().getMyRequestId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string my_request_id = 25;</code>
+       */
+      public Builder setMyRequestIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x01000000;
+        myRequestId_ = value;
         onChanged();
         return this;
       }
@@ -37503,7 +37835,7 @@ public final class ClientProtos {
       "Result\"\222\001\n\tCondition\022\013\n\003row\030\001 \002(\014\022\016\n\006fam" +
       "ily\030\002 \002(\014\022\021\n\tqualifier\030\003 \002(\014\022+\n\014compare_" +
       "type\030\004 \002(\0162\025.hbase.pb.CompareType\022(\n\ncom" +
-      "parator\030\005 \002(\0132\024.hbase.pb.Comparator\"\364\006\n\r" +
+      "parator\030\005 \002(\0132\024.hbase.pb.Comparator\"\211\007\n\r" +
       "MutationProto\022\013\n\003row\030\001 \001(\014\0229\n\013mutate_typ" +
       "e\030\002 \001(\0162$.hbase.pb.MutationProto.Mutatio",
       "nType\0229\n\014column_value\030\003 \003(\0132#.hbase.pb.M" +
@@ -37513,122 +37845,124 @@ public final class ClientProtos {
       "utationProto.Durability:\013USE_DEFAULT\022\'\n\n" +
       "time_range\030\007 \001(\0132\023.hbase.pb.TimeRange\022\035\n" +
       "\025associated_cell_count\030\010 \001(\005\022\r\n\005nonce\030\t " +
-      "\001(\004\032\371\001\n\013ColumnValue\022\016\n\006family\030\001 \002(\014\022K\n\017q" +
-      "ualifier_value\030\002 \003(\01322.hbase.pb.Mutation" +
-      "Proto.ColumnValue.QualifierValue\032\214\001\n\016Qua",
-      "lifierValue\022\021\n\tqualifier\030\001 \001(\014\022\r\n\005value\030" +
-      "\002 \001(\014\022\021\n\ttimestamp\030\003 \001(\004\0227\n\013delete_type\030" +
-      "\004 \001(\0162\".hbase.pb.MutationProto.DeleteTyp" +
-      "e\022\014\n\004tags\030\005 \001(\014\"W\n\nDurability\022\017\n\013USE_DEF" +
-      "AULT\020\000\022\014\n\010SKIP_WAL\020\001\022\r\n\tASYNC_WAL\020\002\022\014\n\010S" +
-      "YNC_WAL\020\003\022\r\n\tFSYNC_WAL\020\004\">\n\014MutationType" +
-      "\022\n\n\006APPEND\020\000\022\r\n\tINCREMENT\020\001\022\007\n\003PUT\020\002\022\n\n\006" +
-      "DELETE\020\003\"p\n\nDeleteType\022\026\n\022DELETE_ONE_VER" +
-      "SION\020\000\022\034\n\030DELETE_MULTIPLE_VERSIONS\020\001\022\021\n\r" +
-      "DELETE_FAMILY\020\002\022\031\n\025DELETE_FAMILY_VERSION",
-      "\020\003\"\242\001\n\rMutateRequest\022)\n\006region\030\001 \002(\0132\031.h" +
-      "base.pb.RegionSpecifier\022)\n\010mutation\030\002 \002(" +
-      "\0132\027.hbase.pb.MutationProto\022&\n\tcondition\030" +
-      "\003 \001(\0132\023.hbase.pb.Condition\022\023\n\013nonce_grou" +
-      "p\030\004 \001(\004\"E\n\016MutateResponse\022 \n\006result\030\001 \001(" +
-      "\0132\020.hbase.pb.Result\022\021\n\tprocessed\030\002 \001(\010\"\242" +
-      "\006\n\004Scan\022 \n\006column\030\001 \003(\0132\020.hbase.pb.Colum" +
-      "n\022*\n\tattribute\030\002 \003(\0132\027.hbase.pb.NameByte" +
-      "sPair\022\021\n\tstart_row\030\003 \001(\014\022\020\n\010stop_row\030\004 \001" +
-      "(\014\022 \n\006filter\030\005 \001(\0132\020.hbase.pb.Filter\022\'\n\n",
-      "time_range\030\006 \001(\0132\023.hbase.pb.TimeRange\022\027\n" +
-      "\014max_versions\030\007 \001(\r:\0011\022\032\n\014cache_blocks\030\010" +
-      " \001(\010:\004true\022\022\n\nbatch_size\030\t \001(\r\022\027\n\017max_re" +
-      "sult_size\030\n \001(\004\022\023\n\013store_limit\030\013 \001(\r\022\024\n\014" +
-      "store_offset\030\014 \001(\r\022&\n\036load_column_famili" +
-      "es_on_demand\030\r \001(\010\022\r\n\005small\030\016 \001(\010\022\027\n\010rev" +
-      "ersed\030\017 \001(\010:\005false\0222\n\013consistency\030\020 \001(\0162" +
-      "\025.hbase.pb.Consistency:\006STRONG\022\017\n\007cachin" +
-      "g\030\021 \001(\r\022\035\n\025allow_partial_results\030\022 \001(\010\0226" +
-      "\n\rcf_time_range\030\023 \003(\0132\037.hbase.pb.ColumnF",
-      "amilyTimeRange\022\032\n\017mvcc_read_point\030\024 \001(\004:" +
-      "\0010\022\037\n\021include_start_row\030\025 \001(\010:\004true\022\037\n\020i" +
-      "nclude_stop_row\030\026 \001(\010:\005false\0222\n\010readType" +
-      "\030\027 \001(\0162\027.hbase.pb.Scan.ReadType:\007DEFAULT" +
-      "\022!\n\022need_cursor_result\030\030 \001(\010:\005false\".\n\010R" +
-      "eadType\022\013\n\007DEFAULT\020\000\022\n\n\006STREAM\020\001\022\t\n\005PREA" +
-      "D\020\002\"\300\002\n\013ScanRequest\022)\n\006region\030\001 \001(\0132\031.hb" +
-      "ase.pb.RegionSpecifier\022\034\n\004scan\030\002 \001(\0132\016.h" +
-      "base.pb.Scan\022\022\n\nscanner_id\030\003 \001(\004\022\026\n\016numb" +
-      "er_of_rows\030\004 \001(\r\022\025\n\rclose_scanner\030\005 \001(\010\022",
-      "\025\n\rnext_call_seq\030\006 \001(\004\022\037\n\027client_handles" +
-      "_partials\030\007 \001(\010\022!\n\031client_handles_heartb" +
-      "eats\030\010 \001(\010\022\032\n\022track_scan_metrics\030\t \001(\010\022\024" +
-      "\n\005renew\030\n \001(\010:\005false\022\030\n\rlimit_of_rows\030\013 " +
-      "\001(\r:\0010\"\025\n\006Cursor\022\013\n\003row\030\001 \001(\014\"\330\002\n\014ScanRe" +
-      "sponse\022\030\n\020cells_per_result\030\001 \003(\r\022\022\n\nscan" +
-      "ner_id\030\002 \001(\004\022\024\n\014more_results\030\003 \001(\010\022\013\n\003tt" +
-      "l\030\004 \001(\r\022!\n\007results\030\005 \003(\0132\020.hbase.pb.Resu" +
-      "lt\022\r\n\005stale\030\006 \001(\010\022\037\n\027partial_flag_per_re" +
-      "sult\030\007 \003(\010\022\036\n\026more_results_in_region\030\010 \001",
-      "(\010\022\031\n\021heartbeat_message\030\t \001(\010\022+\n\014scan_me" +
-      "trics\030\n \001(\0132\025.hbase.pb.ScanMetrics\022\032\n\017mv" +
-      "cc_read_point\030\013 \001(\004:\0010\022 \n\006cursor\030\014 \001(\0132\020" +
-      ".hbase.pb.Cursor\"\332\001\n\024BulkLoadHFileReques" +
+      "\001(\004\022\023\n\013my_trace_id\030\n \001(\t\032\371\001\n\013ColumnValue" +
+      "\022\016\n\006family\030\001 \002(\014\022K\n\017qualifier_value\030\002 \003(" +
+      "\01322.hbase.pb.MutationProto.ColumnValue.Q",
+      "ualifierValue\032\214\001\n\016QualifierValue\022\021\n\tqual" +
+      "ifier\030\001 \001(\014\022\r\n\005value\030\002 \001(\014\022\021\n\ttimestamp\030" +
+      "\003 \001(\004\0227\n\013delete_type\030\004 \001(\0162\".hbase.pb.Mu" +
+      "tationProto.DeleteType\022\014\n\004tags\030\005 \001(\014\"W\n\n" +
+      "Durability\022\017\n\013USE_DEFAULT\020\000\022\014\n\010SKIP_WAL\020" +
+      "\001\022\r\n\tASYNC_WAL\020\002\022\014\n\010SYNC_WAL\020\003\022\r\n\tFSYNC_" +
+      "WAL\020\004\">\n\014MutationType\022\n\n\006APPEND\020\000\022\r\n\tINC" +
+      "REMENT\020\001\022\007\n\003PUT\020\002\022\n\n\006DELETE\020\003\"p\n\nDeleteT" +
+      "ype\022\026\n\022DELETE_ONE_VERSION\020\000\022\034\n\030DELETE_MU" +
+      "LTIPLE_VERSIONS\020\001\022\021\n\rDELETE_FAMILY\020\002\022\031\n\025",
+      "DELETE_FAMILY_VERSION\020\003\"\242\001\n\rMutateReques" +
       "t\022)\n\006region\030\001 \002(\0132\031.hbase.pb.RegionSpeci" +
-      "fier\022>\n\013family_path\030\002 \003(\0132).hbase.pb.Bul" +
-      "kLoadHFileRequest.FamilyPath\022\026\n\016assign_s" +
-      "eq_num\030\003 \001(\010\022\023\n\013cluster_ids\030\004 \003(\t\032*\n\nFam" +
-      "ilyPath\022\016\n\006family\030\001 \002(\014\022\014\n\004path\030\002 \002(\t\"\'\n" +
-      "\025BulkLoadHFileResponse\022\016\n\006loaded\030\001 \002(\010\"a",
-      "\n\026CoprocessorServiceCall\022\013\n\003row\030\001 \002(\014\022\024\n" +
-      "\014service_name\030\002 \002(\t\022\023\n\013method_name\030\003 \002(\t" +
-      "\022\017\n\007request\030\004 \002(\014\"B\n\030CoprocessorServiceR" +
-      "esult\022&\n\005value\030\001 \001(\0132\027.hbase.pb.NameByte" +
-      "sPair\"v\n\031CoprocessorServiceRequest\022)\n\006re" +
-      "gion\030\001 \002(\0132\031.hbase.pb.RegionSpecifier\022.\n" +
-      "\004call\030\002 \002(\0132 .hbase.pb.CoprocessorServic" +
-      "eCall\"o\n\032CoprocessorServiceResponse\022)\n\006r" +
-      "egion\030\001 \002(\0132\031.hbase.pb.RegionSpecifier\022&" +
-      "\n\005value\030\002 \002(\0132\027.hbase.pb.NameBytesPair\"\226",
-      "\001\n\006Action\022\r\n\005index\030\001 \001(\r\022)\n\010mutation\030\002 \001" +
-      "(\0132\027.hbase.pb.MutationProto\022\032\n\003get\030\003 \001(\013" +
-      "2\r.hbase.pb.Get\0226\n\014service_call\030\004 \001(\0132 ." +
-      "hbase.pb.CoprocessorServiceCall\"k\n\014Regio" +
-      "nAction\022)\n\006region\030\001 \002(\0132\031.hbase.pb.Regio" +
-      "nSpecifier\022\016\n\006atomic\030\002 \001(\010\022 \n\006action\030\003 \003" +
-      "(\0132\020.hbase.pb.Action\"c\n\017RegionLoadStats\022" +
-      "\027\n\014memstoreLoad\030\001 \001(\005:\0010\022\030\n\rheapOccupanc" +
-      "y\030\002 \001(\005:\0010\022\035\n\022compactionPressure\030\003 \001(\005:\001" +
-      "0\"j\n\024MultiRegionLoadStats\022)\n\006region\030\001 \003(",
-      "\0132\031.hbase.pb.RegionSpecifier\022\'\n\004stat\030\002 \003" +
-      "(\0132\031.hbase.pb.RegionLoadStats\"\336\001\n\021Result" +
-      "OrException\022\r\n\005index\030\001 \001(\r\022 \n\006result\030\002 \001" +
-      "(\0132\020.hbase.pb.Result\022*\n\texception\030\003 \001(\0132" +
-      "\027.hbase.pb.NameBytesPair\022:\n\016service_resu" +
-      "lt\030\004 \001(\0132\".hbase.pb.CoprocessorServiceRe" +
-      "sult\0220\n\tloadStats\030\005 \001(\0132\031.hbase.pb.Regio" +
-      "nLoadStatsB\002\030\001\"x\n\022RegionActionResult\0226\n\021" +
-      "resultOrException\030\001 \003(\0132\033.hbase.pb.Resul" +
-      "tOrException\022*\n\texception\030\002 \001(\0132\027.hbase.",
-      "pb.NameBytesPair\"x\n\014MultiRequest\022,\n\014regi" +
-      "onAction\030\001 \003(\0132\026.hbase.pb.RegionAction\022\022" +
-      "\n\nnonceGroup\030\002 \001(\004\022&\n\tcondition\030\003 \001(\0132\023." +
-      "hbase.pb.Condition\"\226\001\n\rMultiResponse\0228\n\022" +
-      "regionActionResult\030\001 \003(\0132\034.hbase.pb.Regi" +
-      "onActionResult\022\021\n\tprocessed\030\002 \001(\010\0228\n\020reg" +
-      "ionStatistics\030\003 \001(\0132\036.hbase.pb.MultiRegi" +
-      "onLoadStats*\'\n\013Consistency\022\n\n\006STRONG\020\000\022\014" +
-      "\n\010TIMELINE\020\0012\203\004\n\rClientService\0222\n\003Get\022\024." +
-      "hbase.pb.GetRequest\032\025.hbase.pb.GetRespon",
-      "se\022;\n\006Mutate\022\027.hbase.pb.MutateRequest\032\030." +
-      "hbase.pb.MutateResponse\0225\n\004Scan\022\025.hbase." +
-      "pb.ScanRequest\032\026.hbase.pb.ScanResponse\022P" +
-      "\n\rBulkLoadHFile\022\036.hbase.pb.BulkLoadHFile" +
-      "Request\032\037.hbase.pb.BulkLoadHFileResponse" +
-      "\022X\n\013ExecService\022#.hbase.pb.CoprocessorSe" +
-      "rviceRequest\032$.hbase.pb.CoprocessorServi" +
-      "ceResponse\022d\n\027ExecRegionServerService\022#." +
-      "hbase.pb.CoprocessorServiceRequest\032$.hba" +
-      "se.pb.CoprocessorServiceResponse\0228\n\005Mult",
-      "i\022\026.hbase.pb.MultiRequest\032\027.hbase.pb.Mul" +
-      "tiResponseBB\n*org.apache.hadoop.hbase.pr" +
-      "otobuf.generatedB\014ClientProtosH\001\210\001\001\240\001\001"
+      "fier\022)\n\010mutation\030\002 \002(\0132\027.hbase.pb.Mutati" +
+      "onProto\022&\n\tcondition\030\003 \001(\0132\023.hbase.pb.Co" +
+      "ndition\022\023\n\013nonce_group\030\004 \001(\004\"E\n\016MutateRe" +
+      "sponse\022 \n\006result\030\001 \001(\0132\020.hbase.pb.Result" +
+      "\022\021\n\tprocessed\030\002 \001(\010\"\271\006\n\004Scan\022 \n\006column\030\001" +
+      " \003(\0132\020.hbase.pb.Column\022*\n\tattribute\030\002 \003(" +
+      "\0132\027.hbase.pb.NameBytesPair\022\021\n\tstart_row\030" +
+      "\003 \001(\014\022\020\n\010stop_row\030\004 \001(\014\022 \n\006filter\030\005 \001(\0132",
+      "\020.hbase.pb.Filter\022\'\n\ntime_range\030\006 \001(\0132\023." +
+      "hbase.pb.TimeRange\022\027\n\014max_versions\030\007 \001(\r" +
+      ":\0011\022\032\n\014cache_blocks\030\010 \001(\010:\004true\022\022\n\nbatch" +
+      "_size\030\t \001(\r\022\027\n\017max_result_size\030\n \001(\004\022\023\n\013" +
+      "store_limit\030\013 \001(\r\022\024\n\014store_offset\030\014 \001(\r\022" +
+      "&\n\036load_column_families_on_demand\030\r \001(\010\022" +
+      "\r\n\005small\030\016 \001(\010\022\027\n\010reversed\030\017 \001(\010:\005false\022" +
+      "2\n\013consistency\030\020 \001(\0162\025.hbase.pb.Consiste" +
+      "ncy:\006STRONG\022\017\n\007caching\030\021 \001(\r\022\035\n\025allow_pa" +
+      "rtial_results\030\022 \001(\010\0226\n\rcf_time_range\030\023 \003",
+      "(\0132\037.hbase.pb.ColumnFamilyTimeRange\022\032\n\017m" +
+      "vcc_read_point\030\024 \001(\004:\0010\022\037\n\021include_start" +
+      "_row\030\025 \001(\010:\004true\022\037\n\020include_stop_row\030\026 \001" +
+      "(\010:\005false\0222\n\010readType\030\027 \001(\0162\027.hbase.pb.S" +
+      "can.ReadType:\007DEFAULT\022!\n\022need_cursor_res" +
+      "ult\030\030 \001(\010:\005false\022\025\n\rmy_request_id\030\031 \001(\t\"" +
+      ".\n\010ReadType\022\013\n\007DEFAULT\020\000\022\n\n\006STREAM\020\001\022\t\n\005" +
+      "PREAD\020\002\"\300\002\n\013ScanRequest\022)\n\006region\030\001 \001(\0132" +
+      "\031.hbase.pb.RegionSpecifier\022\034\n\004scan\030\002 \001(\013" +
+      "2\016.hbase.pb.Scan\022\022\n\nscanner_id\030\003 \001(\004\022\026\n\016",
+      "number_of_rows\030\004 \001(\r\022\025\n\rclose_scanner\030\005 " +
+      "\001(\010\022\025\n\rnext_call_seq\030\006 \001(\004\022\037\n\027client_han" +
+      "dles_partials\030\007 \001(\010\022!\n\031client_handles_he" +
+      "artbeats\030\010 \001(\010\022\032\n\022track_scan_metrics\030\t \001" +
+      "(\010\022\024\n\005renew\030\n \001(\010:\005false\022\030\n\rlimit_of_row" +
+      "s\030\013 \001(\r:\0010\"\025\n\006Cursor\022\013\n\003row\030\001 \001(\014\"\330\002\n\014Sc" +
+      "anResponse\022\030\n\020cells_per_result\030\001 \003(\r\022\022\n\n" +
+      "scanner_id\030\002 \001(\004\022\024\n\014more_results\030\003 \001(\010\022\013" +
+      "\n\003ttl\030\004 \001(\r\022!\n\007results\030\005 \003(\0132\020.hbase.pb." +
+      "Result\022\r\n\005stale\030\006 \001(\010\022\037\n\027partial_flag_pe",
+      "r_result\030\007 \003(\010\022\036\n\026more_results_in_region" +
+      "\030\010 \001(\010\022\031\n\021heartbeat_message\030\t \001(\010\022+\n\014sca" +
+      "n_metrics\030\n \001(\0132\025.hbase.pb.ScanMetrics\022\032" +
+      "\n\017mvcc_read_point\030\013 \001(\004:\0010\022 \n\006cursor\030\014 \001" +
+      "(\0132\020.hbase.pb.Cursor\"\332\001\n\024BulkLoadHFileRe" +
+      "quest\022)\n\006region\030\001 \002(\0132\031.hbase.pb.RegionS" +
+      "pecifier\022>\n\013family_path\030\002 \003(\0132).hbase.pb" +
+      ".BulkLoadHFileRequest.FamilyPath\022\026\n\016assi" +
+      "gn_seq_num\030\003 \001(\010\022\023\n\013cluster_ids\030\004 \003(\t\032*\n" +
+      "\nFamilyPath\022\016\n\006family\030\001 \002(\014\022\014\n\004path\030\002 \002(",
+      "\t\"\'\n\025BulkLoadHFileResponse\022\016\n\006loaded\030\001 \002" +
+      "(\010\"a\n\026CoprocessorServiceCall\022\013\n\003row\030\001 \002(" +
+      "\014\022\024\n\014service_name\030\002 \002(\t\022\023\n\013method_name\030\003" +
+      " \002(\t\022\017\n\007request\030\004 \002(\014\"B\n\030CoprocessorServ" +
+      "iceResult\022&\n\005value\030\001 \001(\0132\027.hbase.pb.Name" +
+      "BytesPair\"v\n\031CoprocessorServiceRequest\022)" +
+      "\n\006region\030\001 \002(\0132\031.hbase.pb.RegionSpecifie" +
+      "r\022.\n\004call\030\002 \002(\0132 .hbase.pb.CoprocessorSe" +
+      "rviceCall\"o\n\032CoprocessorServiceResponse\022" +
+      ")\n\006region\030\001 \002(\0132\031.hbase.pb.RegionSpecifi",
+      "er\022&\n\005value\030\002 \002(\0132\027.hbase.pb.NameBytesPa" +
+      "ir\"\226\001\n\006Action\022\r\n\005index\030\001 \001(\r\022)\n\010mutation" +
+      "\030\002 \001(\0132\027.hbase.pb.MutationProto\022\032\n\003get\030\003" +
+      " \001(\0132\r.hbase.pb.Get\0226\n\014service_call\030\004 \001(" +
+      "\0132 .hbase.pb.CoprocessorServiceCall\"k\n\014R" +
+      "egionAction\022)\n\006region\030\001 \002(\0132\031.hbase.pb.R" +
+      "egionSpecifier\022\016\n\006atomic\030\002 \001(\010\022 \n\006action" +
+      "\030\003 \003(\0132\020.hbase.pb.Action\"c\n\017RegionLoadSt" +
+      "ats\022\027\n\014memstoreLoad\030\001 \001(\005:\0010\022\030\n\rheapOccu" +
+      "pancy\030\002 \001(\005:\0010\022\035\n\022compactionPressure\030\003 \001",
+      "(\005:\0010\"j\n\024MultiRegionLoadStats\022)\n\006region\030" +
+      "\001 \003(\0132\031.hbase.pb.RegionSpecifier\022\'\n\004stat" +
+      "\030\002 \003(\0132\031.hbase.pb.RegionLoadStats\"\336\001\n\021Re" +
+      "sultOrException\022\r\n\005index\030\001 \001(\r\022 \n\006result" +
+      "\030\002 \001(\0132\020.hbase.pb.Result\022*\n\texception\030\003 " +
+      "\001(\0132\027.hbase.pb.NameBytesPair\022:\n\016service_" +
+      "result\030\004 \001(\0132\".hbase.pb.CoprocessorServi" +
+      "ceResult\0220\n\tloadStats\030\005 \001(\0132\031.hbase.pb.R" +
+      "egionLoadStatsB\002\030\001\"x\n\022RegionActionResult" +
+      "\0226\n\021resultOrException\030\001 \003(\0132\033.hbase.pb.R",
+      "esultOrException\022*\n\texception\030\002 \001(\0132\027.hb" +
+      "ase.pb.NameBytesPair\"x\n\014MultiRequest\022,\n\014" +
+      "regionAction\030\001 \003(\0132\026.hbase.pb.RegionActi" +
+      "on\022\022\n\nnonceGroup\030\002 \001(\004\022&\n\tcondition\030\003 \001(" +
+      "\0132\023.hbase.pb.Condition\"\226\001\n\rMultiResponse" +
+      "\0228\n\022regionActionResult\030\001 \003(\0132\034.hbase.pb." +
+      "RegionActionResult\022\021\n\tprocessed\030\002 \001(\010\0228\n" +
+      "\020regionStatistics\030\003 \001(\0132\036.hbase.pb.Multi" +
+      "RegionLoadStats*\'\n\013Consistency\022\n\n\006STRONG" +
+      "\020\000\022\014\n\010TIMELINE\020\0012\203\004\n\rClientService\0222\n\003Ge",
+      "t\022\024.hbase.pb.GetRequest\032\025.hbase.pb.GetRe" +
+      "sponse\022;\n\006Mutate\022\027.hbase.pb.MutateReques" +
+      "t\032\030.hbase.pb.MutateResponse\0225\n\004Scan\022\025.hb" +
+      "ase.pb.ScanRequest\032\026.hbase.pb.ScanRespon" +
+      "se\022P\n\rBulkLoadHFile\022\036.hbase.pb.BulkLoadH" +
+      "FileRequest\032\037.hbase.pb.BulkLoadHFileResp" +
+      "onse\022X\n\013ExecService\022#.hbase.pb.Coprocess" +
+      "orServiceRequest\032$.hbase.pb.CoprocessorS" +
+      "erviceResponse\022d\n\027ExecRegionServerServic" +
+      "e\022#.hbase.pb.CoprocessorServiceRequest\032$",
+      ".hbase.pb.CoprocessorServiceResponse\0228\n\005" +
+      "Multi\022\026.hbase.pb.MultiRequest\032\027.hbase.pb" +
+      ".MultiResponseBB\n*org.apache.hadoop.hbas" +
+      "e.protobuf.generatedB\014ClientProtosH\001\210\001\001\240" +
+      "\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -37688,7 +38022,7 @@ public final class ClientProtos {
           internal_static_hbase_pb_MutationProto_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_hbase_pb_MutationProto_descriptor,
-              new java.lang.String[] { "Row", "MutateType", "ColumnValue", "Timestamp", "Attribute", "Durability", "TimeRange", "AssociatedCellCount", "Nonce", });
+              new java.lang.String[] { "Row", "MutateType", "ColumnValue", "Timestamp", "Attribute", "Durability", "TimeRange", "AssociatedCellCount", "Nonce", "MyTraceId", });
           internal_static_hbase_pb_MutationProto_ColumnValue_descriptor =
             internal_static_hbase_pb_MutationProto_descriptor.getNestedTypes().get(0);
           internal_static_hbase_pb_MutationProto_ColumnValue_fieldAccessorTable = new
@@ -37718,7 +38052,7 @@ public final class ClientProtos {
           internal_static_hbase_pb_Scan_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_hbase_pb_Scan_descriptor,
-              new java.lang.String[] { "Column", "Attribute", "StartRow", "StopRow", "Filter", "TimeRange", "MaxVersions", "CacheBlocks", "BatchSize", "MaxResultSize", "StoreLimit", "StoreOffset", "LoadColumnFamiliesOnDemand", "Small", "Reversed", "Consistency", "Caching", "AllowPartialResults", "CfTimeRange", "MvccReadPoint", "IncludeStartRow", "IncludeStopRow", "ReadType", "NeedCursorResult", });
+              new java.lang.String[] { "Column", "Attribute", "StartRow", "StopRow", "Filter", "TimeRange", "MaxVersions", "CacheBlocks", "BatchSize", "MaxResultSize", "StoreLimit", "StoreOffset", "LoadColumnFamiliesOnDemand", "Small", "Reversed", "Consistency", "Caching", "AllowPartialResults", "CfTimeRange", "MvccReadPoint", "IncludeStartRow", "IncludeStopRow", "ReadType", "NeedCursorResult", "MyRequestId", });
           internal_static_hbase_pb_ScanRequest_descriptor =
             getDescriptor().getMessageTypes().get(12);
           internal_static_hbase_pb_ScanRequest_fieldAccessorTable = new

@@ -46,6 +46,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.client.AsyncProcess.RowChecker.ReturnCode;
 import org.apache.hadoop.hbase.CallQueueTooBigException;
 import org.apache.hadoop.hbase.DoNotRetryIOException;
@@ -1090,6 +1091,8 @@ class AsyncProcess {
           ", row cannot be null");
       RegionLocations loc = null;
       try {
+        ConnectionManager.HConnectionImplementation conn=(ConnectionManager.HConnectionImplementation)(connection);
+        RequestIdFlow.propagateRequestId(action,conn);
         loc = connection.locateRegion(
             tableName, action.getAction().getRow(), useCache, true, action.getReplicaId());
       } catch (IOException ex) {
@@ -1111,6 +1114,7 @@ class AsyncProcess {
       // Run the last item on the same thread if we are already on a send thread.
       // We hope most of the time it will be the only item, so we can cut down on threads.
       int actionsRemaining = actionsByServer.size();
+      RequestIdPropagation.logRequestIdReached(actionsByServer);
       // This iteration is by server (the HRegionLocation comparator is by server portion only).
       for (Map.Entry<ServerName, MultiAction<Row>> e : actionsByServer.entrySet()) {
         ServerName server = e.getKey();

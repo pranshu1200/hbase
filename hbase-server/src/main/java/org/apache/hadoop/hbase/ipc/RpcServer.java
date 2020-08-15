@@ -83,6 +83,7 @@ import org.apache.hadoop.hbase.DoNotRetryIOException;
 import org.apache.hadoop.hbase.HBaseIOException;
 import org.apache.hadoop.hbase.HBaseInterfaceAudience;
 import org.apache.hadoop.hbase.HConstants;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.Server;
 import org.apache.hadoop.hbase.classification.InterfaceAudience;
 import org.apache.hadoop.hbase.classification.InterfaceStability;
@@ -2026,6 +2027,7 @@ public class RpcServer implements RpcServerInterface, ConfigurationObserver {
           if (builder != null) {
             ProtobufUtil.mergeFrom(builder, cis, paramSize);
             param = builder.build();
+            RequestIdPropagation.requestReachedServer(param);
           }
           offset += paramSize;
         } else {

@@ -71,6 +71,7 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
+import org.apache.hadoop.hbase.RequestIdPropagation.RequestIdPropagation;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.Tag;
@@ -86,6 +87,7 @@ import org.apache.hadoop.hbase.client.Increment;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.PackagePrivateFieldAccessor;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.RequestIdFlow;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.metrics.ScanMetrics;
@@ -1097,6 +1099,7 @@ public final class ProtobufUtil {
     if (scan.isNeedCursorResult()) {
       scanBuilder.setNeedCursorResult(true);
     }
+    RequestIdFlow.propagateRequestId(scan,scanBuilder);
     return scanBuilder.build();
   }
 
@@ -1450,6 +1453,7 @@ public final class ProtobufUtil {
   public static MutationProto toMutationNoData(final MutationType type, final Mutation mutation,
       final MutationProto.Builder builder, long nonce) throws IOException {
     getMutationBuilderAndSetCommonFields(type, mutation, builder);
+    RequestIdPropagation.propagateRequestId(mutation,builder);
     builder.setAssociatedCellCount(mutation.size());
     if (mutation instanceof Increment) {
       setTimeRange(builder, ((Increment)mutation).getTimeRange());
